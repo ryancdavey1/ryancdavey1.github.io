@@ -1,0 +1,20 @@
+# Site settings
+author: Ryan Davey
+title: 
+header-img: img/home-bg.png
+email: ryancdavey1@gmail.com
+copyright_name: Ryan Davey
+description: > # this means to ignore newlines until "baseurl:"
+  
+baseurl: "" # the subpath of your site, e.g. /blog
+twitter_username: 
+github_username:  ryancdavey1
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+paginate: 5
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+
+gems: [jekyll-paginate, jekyll-feed]

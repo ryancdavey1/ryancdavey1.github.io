@@ -1,11 +1,11 @@
 # Site settings
 author: Ryan Davey
-title: Why did I decide to study Software Engineering?
+title: Ryan's Coding Corner
 header-img: img/home-bg.png
 email: ryancdavey1@gmail.com
 copyright_name: Ryan Davey
 description: > # this means to ignore newlines until "baseurl:"
-  A need to actually build and execute on designs
+  Thoughts on Software Engineering topics
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: 
 github_username:  ryancdavey1

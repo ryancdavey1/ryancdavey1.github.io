@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Creating a CLI for the last.fm API"
-date:       2020-06-29 06:42:26 +0000
+date:       2020-06-29 02:42:27 -0400
 permalink:  creating_a_cli_for_the_last_fm_api
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
-title:      "understanding the complexity of rails "
-date:       2020-11-03 06:29:44 +0000
+title:      "Understanding the complexity of rails "
+date:       2020-11-03 01:29:45 -0500
 permalink:  understanding_the_complexity_of_rails
 ---
 

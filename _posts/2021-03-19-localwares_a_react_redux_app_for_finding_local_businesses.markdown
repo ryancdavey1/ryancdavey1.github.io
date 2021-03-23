@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "LocalWares: A React/Redux app for finding local businesses"
-date:       2021-03-19 08:21:25 +0000
+date:       2021-03-19 04:21:26 -0400
 permalink:  localwares_a_react_redux_app_for_finding_local_businesses
 ---
 
@@ -219,16 +219,70 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { updateBusinessForm })(BusinessForm);
 ```
 
-I did try to add categories as a dropdown, and attempted to get categories from the backend with componentDidMount- however because I have a limited list of categories, that the user can't add to at the moment, it felt a bit overcomplicated, so I just used a basic radio button selection for the category id.
+I did try to add categories as a dropdown, and attempted to get categories from the backend with componentDidMount- however because I have a limited list of categories, that the user can't add to at the moment, it felt a bit overcomplicated, so I just used a basic radio button selection for the category id. Ultimately, I made sure that `handleChange` on the form could handle category changes, and put a default check for the category.
 
-At first I did have issues trying to get the business to save, I made a few errors with getting the action and value to update properly in the store;
+```
+from BusinessForm.js
+const handleChange = (event) => {
+    console.log(event.target);
+    const { name, value, id} = event.target;
+    if (name === "category_id") {
+      let newId = parseInt(id);
+      console.log(name, newId)
+      updateBusinessForm(name, newId)
+    } else {
+      console.log(name, value);
+      updateBusinessForm(name, value);
+    }
+  }
+  ...
+	 <input type="radio" id={"1"} onChange={handleChange} checked={formData.category_id === 1} value="Coffee/Tea" name="category_id" /> Coffee/Tea
+          <input type="radio" id={"2"} onChange={handleChange} checked={formData.category_id === 2} value="Restaurant/Eatery" name="category_id" /> Restaurant/Eatery
+	...
+```
 
-I did try to switch the form to a react component that relied on local state; this did work to update the business details;
 
-However, knowing that I would add edit and delete functionality for individual businesses, I switched the form back to being connected to the redux store, and managed to get the submit function to work properly and update the store.
+## Update Form Components
+At first I did have issues trying to get the business to save, I made a few errors with getting the action and value to update properly in the store. I did try to switch the form to a react component that relied on local state; this did work to update the business details. However, knowing that I would add edit and delete functionality for individual businesses, I switched the form back to being connected to the redux store, and managed to get the submit function to work properly and update the store. The solution was to have a separate reducer just for the form itself, and then another reducer to update the businesses themselves. Below is the form reducer, which allowed me to separate form concerns from concerns of displaying the businesses elsewhere in the app:
+
+```
+const businessFormReducer = (state = initialState, action) => {
+  switch(action.type) {
+    case "UPDATE_NEW_BUSINESS_FORM":
+      return {
+          ...state,
+          [action.formData.name]: action.formData.value
+        }
+    case "RESET_NEW_BUSINESS_FORM":
+      return initialState
+    case "SET_FORM_DATA_FOR_EDIT":
+      return action.businessFormData
+    default:
+      return state
+  }
+}
+
+export default businessFormReducer; 
+```
+
+## Create Wrapper Components for Functionality
+To add edit access to each business, I now needed to include a wrapper component for New and Edit, while maintaining the same business form, Edit funcitonality did not display until I changed all of the `NewBusinessForm`  Labels to `BusinessForm` labels so that I could keep naming conventions consistent. 
 
 
-Edit funcitonality did not display until I changed all of the newbusinessform ->businessform labels so that I could keep consistent
-Switched category back again to using handleChange and having default check for the category 
+At first, the edit functionality seemed to work well, but soon after I ran into a problem  - because I had added edit action/case in my reducer, the fields for the generic business form were now being set to the business that was most recently being edited, so the "new" form would display the most recently edited data. To fix this, I made sure that once editing was completed, the form would be cleared when the editing component was no longer mounted:
 
-this is where I ran into a problem - because I had added edit action/case in my reducer, the fields for the business form were now being set to the business that was most recently being edited.
+```
+from EditBusinessFormWrapper.js
+
+componentWillUnmount() {
+    this.props.resetBusinessForm()
+  }
+```
+
+## Future Additions
+
+The next elements of the app that I would like to work on are:
+* Nested item form under individual businesses
+* Search route for businesses based on inputted address
+* Favorite business list for individual user
+
